@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+table, th , td  {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
+}
+table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+.sortArrow:after {
+  content: '\25b2';  
+}
+.sortArrow.doubleClick:after {
+  content: '\25bc';  
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<body>
+
+<script>
+var hw = angular.module('homework', []);
+hw.controller('hwController', function($scope) {
+    $scope.items = [
+        {Serial:001, Name:'iPhone', Price:300},
+        {Serial:002, Name:'iPad Pro', Price:800},
+        {Serial:003, Name:'iPad', Price:400},
+        {Serial:004, Name:'iPhone X', Price:500},
+        {Serial:005, Name:'iMac Pro', Price:1250},
+        {Serial:006, Name:'iMac', Price:750}
+        
+    ];
+    $scope.sortBy = function(currentSort){
+        $scope.currentSort = currentSort;
+        $scope.doubleClick = ($scope.currentSort === currentSort) ? !$scope.doubleClick : false;
+    }
+
+
+    });
+</script>
+
+<div ng-app="homework" ng-controller="hwController"> 
+
+
+<input type="text" ng-model="searchText">
+
+<table>
+  <tr>
+    <th ng-click="sortBy('Serial')">Serial No.
+      <span class="sortArrow" ng-show="currentSort === 'Serial'" ng-class="{doubleClick: doubleClick}"></span>
+    </th>
+    <th ng-click="sortBy('Name')">Product Name
+      <span class="sortArrow" ng-show="currentSort === 'Name'" ng-class="{doubleClick: doubleClick}"></span>
+    </th>
+    <th ng-click="sortBy('Price')">Product Price
+      <span class="sortArrow" ng-show="currentSort ==='Price' " ng-class="{doubleClick: doubleClick}"></span>
+    </th>
+  </tr>
+  <tr ng-repeat="item in items | filter:searchText | orderBy:currentSort:doubleClick">
+    <td>{{ item.Serial }}</td>
+    <td>{{ item.Name }}</td>
+    <td>{{ item.Price }}</td>
+  </tr>
+</table>
+
+</div>
+
+
+
+</body>
+</html>
